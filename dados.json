@@ -1,0 +1,39 @@
+[
+{
+  "nome": "Carlos Eduardo",
+  "idade": 18,
+  "email": "carlos.eduardo@email.com",
+  "curso": "Desenvolvimento de Sistemas"
+},
+{
+  "nome": "Beatriz Lima",
+  "idade": 16,
+  "email": "beatriz.lima@email.com",
+  "curso": "Administração"
+},
+{
+  "nome": "Pedro Henrique",
+  "idade": 19,
+  "email": "pedro.henrique@email.com",
+  "curso": "Informática"
+},
+{
+  "nome": "Juliana Alves",
+  "idade": 17,
+  "email": "juliana.alves@email.com",
+  "curso": "Desenvolvimento de Sistemas"
+},
+{
+  "nome": "Rafael Costa",
+  "idade": 20,
+  "email": "rafael.costa@email.com",
+  "curso": "Redes de Computadores"
+},
+{
+  "nome": "Mariana Torres",
+  "idade": 18,
+  "email": "mariana.torres@email.com",
+  "curso": "Administração"
+}
+
+]
