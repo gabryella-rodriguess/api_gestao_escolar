@@ -117,4 +117,84 @@ router.get("/limite/:quantidade", async (req, res) => {
 });
 
 
+router.put("/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({
+                mensagem: "ID inválido"
+            });
+        }
+
+        const idObjeto = new ObjectId(id);
+
+        const {nome, idade, email, curso, turma, telefone} = req.body;
+
+        const resultado = await colecaoAlunos().updateOne(
+            { _id: idObjeto },
+            {
+                $set: {
+                    nome: nome,
+                    idade: Number(idade),
+                    email: email,
+                    curso: curso,
+                    turma: turma,
+                    telefone: telefone
+                }
+            }
+        );
+
+        if (resultado.matchedCount === 0) {
+            return res.status(404).json({
+                mensagem: "Aluno não encontrado"
+            });
+        }
+
+        res.json({
+            mensagem: "Aluno atualizado com sucesso"
+        });
+
+    } catch (erro) {
+        res.status(500).json({
+            mensagem: "Erro ao atualizar aluno",
+            erro: erro.message
+        });
+    }
+});
+
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({
+                mensagem: "ID inválido"
+            });
+        }
+
+        const idObjeto = new ObjectId(id);
+
+        const resultado = await colecaoAlunos().deleteOne({ _id: idObjeto });
+
+        if (resultado.deletedCount === 0) {
+            return res.status(404).json({
+                mensagem: "Aluno não encontrado"
+            });
+        }
+
+        res.json({
+            mensagem: "Aluno excluído com sucesso"
+        });
+
+    } catch (erro) {
+        res.status(500).json({
+            mensagem: "Erro ao excluir aluno",
+            erro: erro.message
+        });
+    }
+});
+
+
 export default router;
