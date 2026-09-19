@@ -51,81 +51,62 @@ router.post("/", async(req, res) => {
     }
 });
 
+
 router.get("/", async (req, res) => {
+
     try {
 
         const {
-            nome,
-            curso,
-            turma,
-            idadeMin,
-            idadeMax,
-            ativo,
-            campos,
-            ordenarPor,
-            direcao,
-            limite
+            nome, curso, turma, idadeMin, idadeMax,
+            ativo, campos, ordenarPor, direcao, limite
         } = req.query;
 
-        // Filtro
         const filtro = {};
 
-        // Filtro por nome
-        if (nome) {
-            filtro.nome = {
-                $regex: nome,
-                $options: "i"
-            };
-        }
+        if (nome)
+            filtro.nome = { $regex: nome, $options: "i" };
 
-        // Filtro por curso
-        if (curso) {
+        if (curso)
             filtro.curso = curso;
-        }
 
-        // Filtro por turma
-        if (turma) {
+        if (turma)
             filtro.turma = turma;
-        }
 
-        // Filtro por idade
         if (idadeMin || idadeMax) {
+
             filtro.idade = {};
 
-            if (idadeMin) {
+            if (idadeMin)
                 filtro.idade.$gte = Number(idadeMin);
-            }
 
-            if (idadeMax) {
+            if (idadeMax)
                 filtro.idade.$lte = Number(idadeMax);
-            }
         }
 
-        
-        if (ativo === "true") {
-            filtro.ativo = true;
-        }
+        if (ativo === "true")
+            filtro.situacao = "ativo";
 
-        if (ativo === "false") {
-            filtro.ativo = false;
-        }
+        if (ativo === "false")
+            filtro.situacao = "inativo";
 
-        
         let consulta = colecaoAlunos().find(filtro);
 
-        
+     
         if (campos) {
-            const projection = {};
 
-            campos.split(",").forEach(campo => {
-                projection[campo] = 1;
+            const listaCampos = campos.split(",");
+            const projecao = {};
+
+            listaCampos.forEach(campo => {
+                projecao[campo] = 1;
             });
 
-            consulta = consulta.project(projection);
+            consulta = consulta.project(projecao);
         }
 
-        
+ 
         if (ordenarPor) {
+
             const ordem = direcao === "desc" ? -1 : 1;
 
             consulta = consulta.sort({
@@ -133,18 +114,16 @@ router.get("/", async (req, res) => {
             });
         }
 
-        
+
         if (limite) {
+
             const quantidade = Number(limite);
 
-            if (Number.isInteger(quantidade) && quantidade > 0) {
+            if (Number.isInteger(quantidade) && quantidade > 0)
                 consulta = consulta.limit(quantidade);
-            }
         }
 
-        const alunos = await consulta.toArray();
-
-        res.json(alunos);
+        res.json(await consulta.toArray());
 
     } catch (erro) {
 
@@ -156,22 +135,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-
-// router.get("/", async(req, res) => {
-//     try{
-//         const alunos = await colecaoAlunos()
-//         .find()
-//         .toArray();
-//         res.json(alunos);
-
-//     }catch(erro){
-//         res.status(500).json({
-//             mensagem: "Erro ao listar alunos",
-//             erro: erro.message
-//         })
-
-//     }
-// });
 
 router.get("/ordenados/idade", async (req, res) => {
 
@@ -191,8 +154,6 @@ router.get("/ordenados/idade", async (req, res) => {
         });
     }
 });
-
-
 
 
 router.get("/limite/:quantidade", async (req, res) => {
